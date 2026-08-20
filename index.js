@@ -7,7 +7,7 @@ import exp from 'constants';
 const app = express();
 const __dirname = process.cwd()
 
-app.set('port', process.env.PORT || 3000);
+// app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, './views'))
 
@@ -25,6 +25,15 @@ app.use((err, req, res, next) => {
     res.status(500).send('Error del servidor');
 });
 
-app.listen(app.get('port'), () => {
-  console.log('Conectados')
-})
+// app.listen(app.get('port'), () => {
+//   console.log('Conectados')
+// })
+
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en local: http://localhost:${PORT}`);
+  });
+}
+
+export default app;
