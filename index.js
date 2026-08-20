@@ -1,11 +1,15 @@
 import express from 'express'
 import cors from 'cors'
 import path from 'path'
+import { fileURLToPath } from 'url';
 import { router } from './routes/main.js'
 import exp from 'constants';
 
 const app = express();
-const __dirname = process.cwd()
+
+// Para resolver __dirname correctamente si usas ES Modules (type: "module")
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs')
@@ -17,7 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/', router);
 
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, './public')));
 
 //MANEJO DE ERRORES
 app.use((err, req, res, next) => {
@@ -28,6 +33,7 @@ app.use((err, req, res, next) => {
 // app.listen(app.get('port'), () => {
 //   console.log('Conectados')
 // })
+export default app;
 
 if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 3000;
@@ -35,5 +41,3 @@ if (!process.env.VERCEL) {
     console.log(`Servidor corriendo en local: http://localhost:${PORT}`);
   });
 }
-
-export default app;
